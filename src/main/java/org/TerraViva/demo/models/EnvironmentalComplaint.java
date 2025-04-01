@@ -31,6 +31,10 @@ public class EnvironmentalComplaint {
     @Column(name = "url_column")
     private String url;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public EnvironmentalComplaint() {
 
     }
