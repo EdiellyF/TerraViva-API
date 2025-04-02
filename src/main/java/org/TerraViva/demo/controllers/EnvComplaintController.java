@@ -1,25 +1,22 @@
 package org.TerraViva.demo.controllers;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.TerraViva.demo.models.EnvironmentalComplaint;
-import org.TerraViva.demo.repositories.EnvComplaintRepository;
 
+import org.TerraViva.demo.services.EnvComplaintService;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/envcomplaint")
 public class EnvComplaintController {
 
-    private final EnvComplaintRepository envComplaintRepository;
+    private final EnvComplaintService envService;
 
 
-    public EnvComplaintController(EnvComplaintRepository envComplaintRepository) {
-        this.envComplaintRepository = envComplaintRepository;
+    public EnvComplaintController( EnvComplaintService envService) {
+        this.envService = envService;
     }
 
 
@@ -27,6 +24,23 @@ public class EnvComplaintController {
     @Transactional
     public void createEnvComplaint(@RequestBody EnvironmentalComplaint env) {
         System.out.println("Received Environmental Complaint: " + env);
-        this.envComplaintRepository.save(env);
+        envService.createEnv(env);
     }
+
+    @GetMapping
+    public List<EnvironmentalComplaint> getAllEnvComplaints() {
+        return envService.findAllEnv();
+    }
+
+    @GetMapping("/{id}")
+    public EnvironmentalComplaint getEnvComplaintsByEnvId(@PathVariable long id) {
+        return envService.findEnvById(id);
+    }
+
+    @DeleteMapping("/{id}")// nome tem que ser igual ao parametro...
+    public void deleteEnvComplaintsByEnvId(@PathVariable long id) {
+        envService.deleteEnv(id);
+    }
+
+
 }
